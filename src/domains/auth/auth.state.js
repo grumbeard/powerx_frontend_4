@@ -3,17 +3,21 @@ import { fetchJson } from "lib/fetch-json";
 import { BASE_URL } from "const";
 
 const ACCESS_TOKEN_STORAGE = "auth";
+const UID_STORAGE = "uid";
 
 const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE);
+const storedUID = localStorage.getItem(UID_STORAGE);
 
-const AUTH_DEFAULT_STATE = storedAccessToken
+const AUTH_DEFAULT_STATE = storedAccessToken && storedUID
   ? {
       status: "authenticated",
       accessToken: storedAccessToken,
+      uid: storedUID
     }
   : {
       status: "anonymous",
       accessToken: null,
+      uid: null
     };
 
 const AuthContext = React.createContext();
@@ -24,12 +28,14 @@ const authReducer = (state, event) => {
       return {
         accessToken: event.accessToken,
         status: "authenticated",
+        uid: event.uid
       };
 
     case "logout":
       return {
         accessToken: null,
         status: "anonymous",
+        uid: null
       };
 
     default:
@@ -40,10 +46,11 @@ const authReducer = (state, event) => {
 export const useAuthState = () => {
   const [state, dispatch] = React.useReducer(authReducer, AUTH_DEFAULT_STATE);
 
-  const login = (accessToken) =>
+  const login = (accessToken, uid) =>
     dispatch({
       type: "login",
       accessToken,
+      uid
     });
 
   const logout = () =>
@@ -83,6 +90,10 @@ const login = (email, password) =>
     },
   });
 
+const getUserId = (token) => fetchJson(`${BASE_URL}/whoami`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+
 export const useLogin = () => {
   const auth = React.useContext(AuthContext);
 
@@ -91,10 +102,17 @@ export const useLogin = () => {
   }
 
   return function invokeLogin({ email, password }) {
-    return login(email, password).then((res) => {
-      auth.login(res.access_token);
-      localStorage.setItem(ACCESS_TOKEN_STORAGE, res.access_token);
-    });
+    return login(email, password)
+      .then(async (res) => {
+        const userInfo = await getUserId(res.access_token);
+        res.uid = userInfo.userId;
+        return res;
+      })
+      .then((res) => {
+        auth.login(res.access_token, res.uid);
+        localStorage.setItem(ACCESS_TOKEN_STORAGE, res.access_token);
+        localStorage.setItem(UID_STORAGE, res.userId);
+      });
   };
 };
 
@@ -108,6 +126,7 @@ export const useLogout = () => {
   return () => {
     auth.logout();
     localStorage.removeItem(ACCESS_TOKEN_STORAGE);
+    localStorage.removeItem(UID_STORAGE);
   };
 };
 
