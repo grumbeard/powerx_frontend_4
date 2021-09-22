@@ -24,7 +24,7 @@ export const Movies = () => {
   
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between px-10 py-5">
         {PrevButton}
         {NextButton}
       </div>

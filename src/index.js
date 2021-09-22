@@ -7,6 +7,9 @@ import "./index.css";
 import { AppShell } from './app-shell';
 import { Movies } from './pages/movies';
 import { Movie } from './pages/movie';
+import { AuthProvider } from "domains/auth/auth.state";
+import { LoginPage } from './pages/login';
+import { RegisterPage } from './pages/register';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,15 +22,17 @@ const queryClient = new QueryClient({
 ReactDOM.render(
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
-      <AppShell>
-        <Switch>
-          <Route path='/login' />
-          <Route path='/register' />
-          <Route path='/movie/:movieId' component={Movie} />
-          <Route path='/' exact component={Movies} />
-          <Route path='*' />
-        </Switch>
-      </AppShell>
+      <AuthProvider>
+        <AppShell>
+          <Switch>
+            <Route path='/login' component={LoginPage} />
+            <Route path='/register' component={RegisterPage} />
+            <Route path='/movie/:movieId' component={Movie} />
+            <Route path='/' exact component={Movies} />
+            <Route path='*' />
+          </Switch>
+        </AppShell>
+      </AuthProvider>
     </QueryClientProvider>
   </BrowserRouter>,
   document.querySelector("#root")
