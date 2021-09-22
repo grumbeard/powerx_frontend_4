@@ -5,7 +5,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./index.css";
 
 import { AppShell } from './app-shell';
-import { Movies } from './pages/movies'
+import { Movies } from './pages/movies';
+import { Movie } from './pages/movie';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,7 @@ ReactDOM.render(
         <Switch>
           <Route path='/login' />
           <Route path='/register' />
-          <Route path='/movie/:movieId' />
+          <Route path='/movie/:movieId' component={Movie} />
           <Route path='/' exact component={Movies} />
           <Route path='*' />
         </Switch>

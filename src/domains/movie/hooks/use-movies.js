@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { getMovies } from 'domains/movie/movie.services';
+import { getMovies, getMovie } from 'domains/movie/movie.services';
 
 export const useMovies = () => {
   const [page, setPage] = useState(1);
@@ -16,3 +16,11 @@ export const useMovies = () => {
     setPage
   };
 };
+
+export const useMovie = (movieId) => {
+  const query = useQuery("movie", () => getMovie(movieId), { staleTime: 3000 });
+  
+  return {
+    ...query
+  }
+}

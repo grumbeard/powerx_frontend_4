@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardHeading, CardBody } from 'components/card';
+import { Card, CardFooter, CardBody } from 'components/card';
 
 function shortenText(maxChar, text) {
   if (text.length > maxChar)
@@ -13,11 +13,11 @@ export const MovieCard = (props) => {
   return (
     <Card className="bg-blue-50">
       <CardBody>
-        <img src={posterUrl} alt={`${title} poster`} />
+        <img src={posterUrl} alt="movie poster" />
       </CardBody>
-      <CardHeading>
-        {shortenText(45,title)}
-      </CardHeading>
+      <CardFooter>
+        <h3>{shortenText(45,title)}</h3>
+      </CardFooter>
     </Card>
   );
 }
