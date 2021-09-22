@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useParams } from "react-router-dom";
 import { useMovie } from 'domains/movie/hooks/use-movies';
+import { useComments } from 'domains/movie/hooks/use-comments';
 import { Card, CardHeading, CardBody } from 'components/card';
 import { Badge } from 'components/badge';
+import { Comment } from 'domains/movie/components/comment';
 
 function extractYear(dateString) {
   const regex = /1|2\d{3}/;
@@ -12,6 +14,7 @@ function extractYear(dateString) {
 export const Movie = () => {
   const { movieId } = useParams();
   const { data: movie, status } = useMovie(movieId);
+  const { data: comments } = useComments(movieId);
   
   return(
     <>
@@ -36,8 +39,10 @@ export const Movie = () => {
                 <p>Released: {movie.releaseDate}</p>
               </CardBody>
               <CardBody>
-                <h2>Reviews</h2>
-                
+                <h2 className="mb-10">Reviews</h2>
+                { comments &&  comments.map(comment =>
+                  <Comment key={comment._id} comment={comment} />
+                )}
               </CardBody>
             </Card>
         </div>

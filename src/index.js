@@ -8,7 +8,13 @@ import { AppShell } from './app-shell';
 import { Movies } from './pages/movies';
 import { Movie } from './pages/movie';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 3000
+    }
+  }
+});
 
 ReactDOM.render(
   <BrowserRouter>

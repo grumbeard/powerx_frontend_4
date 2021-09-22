@@ -8,7 +8,7 @@ export const useMovies = () => {
   const query = useQuery(["movies", page], () => {
     // Async function for grabbing data
     return getMovies(page);
-  }, { staleTime: 3000 })
+  })
   
   return {
     ...query,
@@ -18,7 +18,7 @@ export const useMovies = () => {
 };
 
 export const useMovie = (movieId) => {
-  const query = useQuery("movie", () => getMovie(movieId), { staleTime: 3000 });
+  const query = useQuery("movie", () => getMovie(movieId));
   
   return {
     ...query
