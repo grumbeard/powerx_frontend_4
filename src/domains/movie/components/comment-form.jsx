@@ -3,26 +3,47 @@ import { Button } from "components/button";
 import { TextareaField } from 'components/textarea-field';
 import { SelectField } from 'components/select-field';
 import { useCommentMutation } from '../hooks/use-comments';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
+
+const validationSchema = Yup.object({
+  rating: Yup.number().required('Rating Required'),
+  content: Yup.string().required('Comments Required'),
+});
 
 export const CommentForm = ({movieId}) => {
-  const [rating, setRating] = React.useState(1);
-  const [content, setContent] = React.useState('');
-  const [status, setStatus] = React.useState('idle');
   const { mutate } = useCommentMutation('create');
+  const [status, setStatus] = React.useState('idle');
+  const ratingInputRef = React.useRef();
+  
+  const formik = useFormik({
+    initialValues: {
+      rating: 1,
+      content: ''
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      setStatus("loading");
+      mutate(
+        { ...values, rating: Number(values.rating), movieId },
+        {
+          onSuccess: () => {
+            formik.reset();
+            setStatus("idle");
+            if (ratingInputRef.current) {
+              ratingInputRef.current.focus();
+            }
+          },
+          onError: () => setStatus("error")
+        }
+      );
+    }
+  });
+  
   return (
     <div>
       <form
-        onSubmit={(ev) => {
-          ev.preventDefault();
-          setStatus("loading");
-          mutate(
-            { rating: Number(rating), content, movieId },
-            {
-              onSuccess: () => setStatus("idle"),
-              onError: () => setStatus("error")
-            }
-          );
-        }}
+        onSubmit={formik.handleSubmit}
         className="p-6"
       >
         {status === "error" && (
@@ -33,13 +54,15 @@ export const CommentForm = ({movieId}) => {
         <div className="space-y-6">
           <SelectField
             label="Rating"
-            value={rating}
-            onChangeValue={setRating}
+            value={formik.values.rating}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             name="rating"
             id="rating"
             autoFocus
             required
             disabled={status === "loading"}
+            ref={ratingInputRef}
           >
             <option value="1">1</option>
             <option value="2">2</option>
@@ -47,15 +70,26 @@ export const CommentForm = ({movieId}) => {
             <option value="4">4</option>
             <option value="5">5</option>
           </SelectField>
+          {formik.touched.rating && formik.errors.rating && (
+            <div className="block text-xs text-red-500">
+              {formik.errors.rating}
+            </div>
+          )}
           <TextareaField
             label="Comment"
-            value={content}
-            onChangeValue={setContent}
+            value={formik.values.content}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             name="content"
             id="content"
             required
             disabled={status === "loading"}
           />
+          {formik.touched.content && formik.errors.content && (
+            <div className="block text-xs text-red-500">
+              {formik.errors.content}
+            </div>
+          )}
           <Button
             type="submit"
             variant="primary"
