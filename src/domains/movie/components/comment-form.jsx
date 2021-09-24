@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object({
-  rating: Yup.number().required('Rating Required'),
+  rating: Yup.string().oneOf(['1','2','3','4','5']).required('Rating Required'),
   content: Yup.string().required('Comments Required'),
 });
 
@@ -18,7 +18,7 @@ export const CommentForm = ({movieId}) => {
   
   const formik = useFormik({
     initialValues: {
-      rating: 1,
+      rating: '1',
       content: ''
     },
     validationSchema,
@@ -28,7 +28,7 @@ export const CommentForm = ({movieId}) => {
         { ...values, rating: Number(values.rating), movieId },
         {
           onSuccess: () => {
-            formik.reset();
+            formik.resetForm();
             setStatus("idle");
             if (ratingInputRef.current) {
               ratingInputRef.current.focus();
@@ -59,7 +59,6 @@ export const CommentForm = ({movieId}) => {
             onBlur={formik.handleBlur}
             name="rating"
             id="rating"
-            autoFocus
             required
             disabled={status === "loading"}
             ref={ratingInputRef}
