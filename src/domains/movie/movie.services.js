@@ -6,3 +6,12 @@ export const getMovies = (page, signal) => fetchJson(`${BASE_URL}/movie?page=${p
 export const getMovie = (id, signal) => fetchJson(`${BASE_URL}/movie/movie/${id}`, { signal });
 
 export const getComments = (id, signal) => fetchJson(`${BASE_URL}/movie/movie/${id}/comment`, { signal });
+
+export const createComment = (data, {token}) => fetchJson(`${BASE_URL}/movie/comment`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+})

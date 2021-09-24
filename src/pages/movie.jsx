@@ -5,6 +5,8 @@ import { useComments } from 'domains/movie/hooks/use-comments';
 import { Card, CardHeading, CardBody } from 'components/card';
 import { Badge } from 'components/badge';
 import { Comment } from 'domains/movie/components/comment';
+import { CommentForm } from 'domains/movie/components/comment-form';
+import { useAuth } from 'domains/auth/auth.state';
 
 function extractYear(dateString) {
   const regex = /1|2\d{3}/;
@@ -13,22 +15,23 @@ function extractYear(dateString) {
 
 export const Movie = () => {
   const { movieId } = useParams();
-  const { data: movie, status } = useMovie(movieId);
+  const { data: movie, status: movieStatus } = useMovie(movieId);
   const { data: comments } = useComments(movieId);
+  const { status, uid } = useAuth();
   
   return(
     <>
     { movie && (
       <div style={{backgroundImage: `url(${movie.backdropUrl})`}} className="min-h-screen bg-gradient-to-br bg-cover flex justify-center">
-        <div className="backdrop-filter backdrop-blur-sm lg:w-3/4 w-4/5 flex p-10 gap-10">
-            <Card className="w-1/2">
+        <div className="backdrop-filter backdrop-blur-sm h-screen lg:w-3/4 w-4/5 flex p-10 gap-10">
+            <Card className="w-1/2 h-full">
               <img src={movie.posterUrl} alt="movie poster" />
             </Card>
-            <Card className="w-1/2 p-10 bg-white relative">
-              <CardHeading>
+            <Card className="w-1/2 p-10 bg-white h-full overflow-y-scroll">
+              <CardHeading className="relative">
                 {movie.adult
-                  ? <Badge color="red" className="absolute right-10">Adult</Badge>
-                  : <Badge color="green" className="absolute right-10">Child-Friendly</Badge>
+                  ? <Badge color="red" className="absolute right-4 bottom-7">Adult</Badge>
+                  : <Badge color="green" className="absolute right-4 bottom-7">Child-Friendly</Badge>
                 }
                 <h1>{movie.title}</h1>
                 <h2>{extractYear(movie.releaseDate)}</h2>
@@ -39,10 +42,11 @@ export const Movie = () => {
                 <p>Released: {movie.releaseDate}</p>
               </CardBody>
               <CardBody>
-                <h2 className="mb-10">Reviews</h2>
+                <h2 className="mb-1">Reviews</h2>
                 { comments &&  comments.map(comment =>
-                  <Comment key={comment._id} comment={comment} />
+                  <Comment key={comment._id} comment={comment} editable={comment.userId === uid} />
                 )}
+                {(status === 'authenticated') && <CommentForm movieId={movieId} />}
               </CardBody>
             </Card>
         </div>
