@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Button } from "components/button";
 import { TextareaField } from 'components/textarea-field';
 import { SelectField } from 'components/select-field';
-import { useCreateCommentMutation } from '../hooks/use-comments';
+import { useCommentMutation } from '../hooks/use-comments';
 
 export const CommentForm = ({movieId}) => {
   const [rating, setRating] = React.useState(1);
   const [content, setContent] = React.useState('');
   const [status, setStatus] = React.useState('idle');
-  const { mutate } = useCreateCommentMutation();
+  const { mutate } = useCommentMutation('create');
   return (
     <div>
       <form
@@ -16,9 +16,9 @@ export const CommentForm = ({movieId}) => {
           ev.preventDefault();
           setStatus("loading");
           mutate(
-            { rating, content, movieId },
+            { rating: Number(rating), content, movieId },
             {
-              onSuccess: () => console.log("success"),
+              onSuccess: () => setStatus("idle"),
               onError: () => setStatus("error")
             }
           );

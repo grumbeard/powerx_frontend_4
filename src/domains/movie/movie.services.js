@@ -15,3 +15,10 @@ export const createComment = (data, {token}) => fetchJson(`${BASE_URL}/movie/com
   },
   body: JSON.stringify(data)
 })
+
+export const deleteComment = (id, {token}) => fetchJson(`${BASE_URL}/movie/comment/${id}`, {
+  method: 'DELETE',
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})

@@ -20,7 +20,7 @@ export const AppShell = ({children}) => {
             </Link>
         }
         <div className="flex justify-center items-center py-2 max-w-7xl mx-auto" id="app-title">
-          <h1 className="text-white">Movies</h1>
+          <Link to="/"><h1 className="text-white">Movies</h1></Link>
         </div>
       </div>
     </header>
