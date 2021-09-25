@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Card, CardFooter, CardBody } from 'components/card';
+import { PropTypes } from 'prop-types';
 
 function shortenText(maxChar, text) {
   if (text.length > maxChar)
@@ -20,4 +21,11 @@ export const MovieCard = (props) => {
       </CardFooter>
     </Card>
   );
+}
+
+MovieCard.propTypes = {
+  movie: PropTypes.shape({
+    title: PropTypes.string,
+    posterUrl: PropTypes.number
+  })
 }

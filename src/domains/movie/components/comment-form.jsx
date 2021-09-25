@@ -5,6 +5,7 @@ import { SelectField } from 'components/select-field';
 import { useCommentMutation } from '../hooks/use-comments';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
+import { PropTypes } from 'prop-types';
 
 const validationSchema = Yup.object({
   rating: Yup.string().oneOf(['1','2','3','4','5']).required('Rating Required'),
@@ -101,4 +102,8 @@ export const CommentForm = ({movieId}) => {
       </form>
     </div>
   );
+}
+
+CommentForm.propTypes = {
+  movieId: PropTypes.string.isRequired
 }

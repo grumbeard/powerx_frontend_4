@@ -3,6 +3,7 @@ import { Card, CardHeading, CardBody } from 'components/card';
 import { StarIcon, XCircleIcon } from '@heroicons/react/solid'
 import { IconButton } from 'components/icon-button';
 import { useCommentMutation } from '../hooks/use-comments';
+import { PropTypes } from 'prop-types';
 
 const DeleteButton = ({className, onClick}) => {
   return(
@@ -12,7 +13,7 @@ const DeleteButton = ({className, onClick}) => {
   );
 }
 
-export const Comment = ({ comment, editable }) => {
+export const Comment = ({ comment, editable=false }) => {
   const { content, rating, userName, createdAt, updatedAt } = comment;
   const stars = [...Array(parseInt(rating))].map((v,i) => <StarIcon className="w-5 h-5" key={i}/>);
   const dateString = createdAt === updatedAt ? createdAt : updatedAt;
@@ -37,4 +38,15 @@ export const Comment = ({ comment, editable }) => {
       </CardBody>
     </Card>
   );
+}
+
+Comment.propTypes = {
+  comment: PropTypes.shape({
+    content: PropTypes.string,
+    rating: PropTypes.number,
+    userName: PropTypes.string,
+    createdAt: PropTypes.string,
+    updatedAt: PropTypes.string
+  }).isRequired,
+  editable: PropTypes.bool
 }
