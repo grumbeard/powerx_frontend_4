@@ -28,6 +28,7 @@ export const Movies = () => {
         {PrevButton}
         {NextButton}
       </div>
+      {status !== 'success' && (<div className='text-center'><h1>Loading...</h1></div>)}
       <div className="grid lg:grid-cols-5 gap-10">
         {movies && movies.map(movie =>
           <Link to={`/movie/${movie._id}`} key={movie._id}>

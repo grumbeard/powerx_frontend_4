@@ -16,11 +16,12 @@ function extractYear(dateString) {
 export const Movie = () => {
   const { movieId } = useParams();
   const { data: movie, status: movieStatus } = useMovie(movieId);
-  const { data: comments } = useComments(movieId);
+  const { data: comments, status: commentsStatus } = useComments(movieId);
   const { status, uid } = useAuth();
   
   return(
     <>
+    {movieStatus !== 'success' && (<div className='text-center'><h1>Loading...</h1></div>)}
     { movie && (
       <div style={{backgroundImage: `url(${movie.backdropUrl})`}} className="min-h-screen bg-gradient-to-br bg-cover flex justify-center">
         <div className="backdrop-filter backdrop-blur-sm h-screen lg:w-3/4 w-4/5 flex p-10 gap-10">
@@ -43,6 +44,7 @@ export const Movie = () => {
               </CardBody>
               <CardBody>
                 <h2 className="mb-1">Reviews</h2>
+                {commentsStatus !== 'success' && (<div className='text-center'><h1>Loading comments...</h1></div>)}
                 { comments &&  comments.map(comment =>
                   <Comment key={comment._id} comment={comment} editable={comment.userId === uid} />
                 )}
