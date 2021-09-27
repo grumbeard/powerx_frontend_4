@@ -12,7 +12,7 @@ const validationSchema = Yup.object({
   content: Yup.string().required('Comments Required'),
 });
 
-export const CommentForm = ({movieId}) => {
+export const CommentForm = ({movieId, ...props}) => {
   const { mutate } = useCommentMutation('create');
   const [status, setStatus] = React.useState('idle');
   const ratingInputRef = React.useRef();
@@ -42,65 +42,64 @@ export const CommentForm = ({movieId}) => {
   });
   
   return (
-    <div>
-      <form
-        onSubmit={formik.handleSubmit}
-        className="p-6"
-      >
-        {status === "error" && (
-          <div className="p-2 text-red-800 bg-red-200 rounded-sm">
-            Fail to submit comment.
+    <form
+      {...props}
+      onSubmit={formik.handleSubmit}
+      className="p-6"
+    >
+      {status === "error" && (
+        <div className="p-2 text-red-800 bg-red-200 rounded-sm">
+          Fail to submit comment.
+        </div>
+      )}
+      <div className="space-y-6">
+        <SelectField
+          label="Rating"
+          value={formik.values.rating}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          name="rating"
+          id="rating"
+          required
+          disabled={status === "loading"}
+          ref={ratingInputRef}
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </SelectField>
+        {formik.touched.rating && formik.errors.rating && (
+          <div className="block text-xs text-red-500">
+            {formik.errors.rating}
           </div>
         )}
-        <div className="space-y-6">
-          <SelectField
-            label="Rating"
-            value={formik.values.rating}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            name="rating"
-            id="rating"
-            required
-            disabled={status === "loading"}
-            ref={ratingInputRef}
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </SelectField>
-          {formik.touched.rating && formik.errors.rating && (
-            <div className="block text-xs text-red-500">
-              {formik.errors.rating}
-            </div>
-          )}
-          <TextareaField
-            label="Comment"
-            value={formik.values.content}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            name="content"
-            id="content"
-            required
-            disabled={status === "loading"}
-          />
-          {formik.touched.content && formik.errors.content && (
-            <div className="block text-xs text-red-500">
-              {formik.errors.content}
-            </div>
-          )}
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-full"
-            disabled={status === "loading"}
-          >
-            Review
-          </Button>
-        </div>
-      </form>
-    </div>
+        <TextareaField
+          label="Comment"
+          value={formik.values.content}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          name="content"
+          id="content"
+          required
+          disabled={status === "loading"}
+        />
+        {formik.touched.content && formik.errors.content && (
+          <div className="block text-xs text-red-500">
+            {formik.errors.content}
+          </div>
+        )}
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={status === "loading"}
+        >
+          Review
+        </Button>
+      </div>
+    </form>
   );
 }
 

@@ -26,6 +26,6 @@ export const MovieCard = (props) => {
 MovieCard.propTypes = {
   movie: PropTypes.shape({
     title: PropTypes.string,
-    posterUrl: PropTypes.number
+    posterUrl: PropTypes.string
   })
 }

@@ -40,7 +40,7 @@ export const useCommentMutation = (type) => {
       mutatingFunction = deleteFn;
       break;
     default:
-      console.log('Unable to mutate comment');
+      console.log('Unable to mutate comment, please supply valid type');
   }
   
   return useMutation(mutatingFunction, { onSuccess: () => queryClient.invalidateQueries('comments') });
