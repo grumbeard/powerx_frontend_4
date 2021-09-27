@@ -146,9 +146,17 @@ export const useRegister = () => {
   }
   
   return function invokeRegister({name, email, password, avatar}) {
-    return register({name, email, password, avatar}).then(res => {
-      auth.login(res.access_token);
+    return register({name, email, password, avatar})
+    .then(() => login(email, password))
+    .then(async (res) => {
+      const userInfo = await getUserId(res.access_token);
+        res.uid = userInfo.userId;
+        return res;
+    })
+    .then(res => {
+      auth.login(res.access_token, res.uid);
       localStorage.setItem(ACCESS_TOKEN_STORAGE, res.access_token);
+      localStorage.setItem(UID_STORAGE, res.userId);
     });
   };
 };
