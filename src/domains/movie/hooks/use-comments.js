@@ -3,7 +3,7 @@ import { getComments, createComment, deleteComment } from 'domains/movie/movie.s
 import { useAuth } from 'domains/auth/auth.state';
 
 export const useComments = (movieId) => {
-  const query = useQuery("comments", () => getComments(movieId), { staleTime: 1000 });
+  const query = useQuery("comments", () => getComments(movieId), { staleTime: 1000, keepPreviousData: true });
   
   return {
     ...query

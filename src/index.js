@@ -10,6 +10,7 @@ import { Movie } from './pages/movie';
 import { AuthProvider } from "domains/auth/auth.state";
 import { LoginPage } from './pages/login';
 import { RegisterPage } from './pages/register';
+import { NotFound } from './pages/not-found';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,7 +30,7 @@ ReactDOM.render(
             <Route path='/register' component={RegisterPage} />
             <Route path='/movie/:movieId' component={Movie} />
             <Route path='/' exact component={Movies} />
-            <Route path='*' />
+            <Route path='*' component={NotFound} />
           </Switch>
         </AppShell>
       </AuthProvider>

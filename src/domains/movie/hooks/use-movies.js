@@ -8,7 +8,7 @@ export const useMovies = () => {
   const query = useQuery(["movies", page], () => {
     // Async function for grabbing data
     return getMovies(page);
-  })
+  }, { keepPreviousData : true })
   
   return {
     ...query,
