@@ -13,11 +13,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Installation
 To see it on LocalHost, run
 
-### `npm install` and `npm start`
+- `npm install` and `npm start`
 
 To see the styleguide on LocalHost, run
 
-### `npm start:styleguide`
+- `npm start:styleguide`
 
 
 ## Objectives
@@ -45,8 +45,9 @@ A couple of techniques were put into practice with this assignment
 
 ## Extra Features
 1. User is automatically logged in on successful account registration
-
 2. UID is displayed at top of screen for debugging purposes (not a feature?)
+3. When movie titles are longer than 45 chars, they are truncated with "..." on the Home Page
+4. Movie backdrop image used in Movie Details page
 
 
 ## Main Learnings
@@ -56,3 +57,11 @@ A couple of techniques were put into practice with this assignment
 - Testing React components (especially form components)
   - Mocking user interaction with `fireEvent` from `@testing-library/react`
   - Testing for observable changes due to async handlers (e.g. form submission involving API calls)
+  
+
+## Screenshots
+### Home Page
+<img width="1434" alt="image" src="https://user-images.githubusercontent.com/51464365/135461859-11041b96-79e9-4500-9874-cb2e7019226c.png">
+
+### Movie Details Page
+<img width="1434" alt="image" src="https://user-images.githubusercontent.com/51464365/135462522-1a17e0e9-a8e4-4796-9df8-f3270ab4dd4c.png">
