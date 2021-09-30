@@ -5,6 +5,7 @@ This repository was created as part of assignments from the Frontend Module of t
 
 ## Live Links (Deployed on Netlify)
 👉 [App] https://grumbeard-powerx-frontend-session-4.netlify.app
+
 👉 [Style Guide] https://grumbeard-powerx-frontend-session-4-styleguide.netlify.app
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
