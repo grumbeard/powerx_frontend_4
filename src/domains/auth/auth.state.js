@@ -111,7 +111,7 @@ export const useLogin = () => {
       .then((res) => {
         auth.login(res.access_token, res.uid);
         localStorage.setItem(ACCESS_TOKEN_STORAGE, res.access_token);
-        localStorage.setItem(UID_STORAGE, res.userId);
+        localStorage.setItem(UID_STORAGE, res.uid);
       });
   };
 };
